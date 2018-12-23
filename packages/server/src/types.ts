@@ -63,6 +63,8 @@ export interface RegisterMutationArgs {
 
 import { GraphQLResolveInfo } from "graphql";
 
+import { MyContext } from "./context";
+
 export type Resolver<Result, Parent = {}, Context = {}, Args = {}> = (
   parent: Parent,
   args: Args,
@@ -113,19 +115,19 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 ) => TResult | Promise<TResult>;
 
 export namespace QueryResolvers {
-  export interface Resolvers<Context = {}, TypeParent = {}> {
+  export interface Resolvers<Context = MyContext, TypeParent = {}> {
     me?: MeResolver<Maybe<User>, TypeParent, Context>;
   }
 
-  export type MeResolver<R = Maybe<User>, Parent = {}, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
+  export type MeResolver<
+    R = Maybe<User>,
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace UserResolvers {
-  export interface Resolvers<Context = {}, TypeParent = User> {
+  export interface Resolvers<Context = MyContext, TypeParent = User> {
     username?: UsernameResolver<string, TypeParent, Context>;
 
     email?: EmailResolver<string, TypeParent, Context>;
@@ -134,17 +136,17 @@ export namespace UserResolvers {
   export type UsernameResolver<
     R = string,
     Parent = User,
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context>;
-  export type EmailResolver<R = string, Parent = User, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
+  export type EmailResolver<
+    R = string,
+    Parent = User,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace MutationResolvers {
-  export interface Resolvers<Context = {}, TypeParent = {}> {
+  export interface Resolvers<Context = MyContext, TypeParent = {}> {
     login?: LoginResolver<LoginResponse, TypeParent, Context>;
 
     register?: RegisterResolver<RegisterResponse, TypeParent, Context>;
@@ -153,7 +155,7 @@ export namespace MutationResolvers {
   export type LoginResolver<
     R = LoginResponse,
     Parent = {},
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context, LoginArgs>;
   export interface LoginArgs {
     input: LoginInput;
@@ -162,7 +164,7 @@ export namespace MutationResolvers {
   export type RegisterResolver<
     R = RegisterResponse,
     Parent = {},
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context, RegisterArgs>;
   export interface RegisterArgs {
     input: RegisterInput;
@@ -170,7 +172,7 @@ export namespace MutationResolvers {
 }
 
 export namespace LoginResponseResolvers {
-  export interface Resolvers<Context = {}, TypeParent = LoginResponse> {
+  export interface Resolvers<Context = MyContext, TypeParent = LoginResponse> {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, Context>;
 
     user?: UserResolver<Maybe<User>, TypeParent, Context>;
@@ -179,43 +181,46 @@ export namespace LoginResponseResolvers {
   export type ErrorsResolver<
     R = Maybe<Error[]>,
     Parent = LoginResponse,
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context>;
   export type UserResolver<
     R = Maybe<User>,
     Parent = LoginResponse,
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
 
 export namespace ErrorResolvers {
-  export interface Resolvers<Context = {}, TypeParent = Error> {
+  export interface Resolvers<Context = MyContext, TypeParent = Error> {
     path?: PathResolver<string, TypeParent, Context>;
 
     message?: MessageResolver<string, TypeParent, Context>;
   }
 
-  export type PathResolver<R = string, Parent = Error, Context = {}> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
+  export type PathResolver<
+    R = string,
+    Parent = Error,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
   export type MessageResolver<
     R = string,
     Parent = Error,
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
 
 export namespace RegisterResponseResolvers {
-  export interface Resolvers<Context = {}, TypeParent = RegisterResponse> {
+  export interface Resolvers<
+    Context = MyContext,
+    TypeParent = RegisterResponse
+  > {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, Context>;
   }
 
   export type ErrorsResolver<
     R = Maybe<Error[]>,
     Parent = RegisterResponse,
-    Context = {}
+    Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
 
@@ -223,7 +228,7 @@ export namespace RegisterResponseResolvers {
 export type SkipDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   SkipDirectiveArgs,
-  {}
+  MyContext
 >;
 export interface SkipDirectiveArgs {
   /** Skipped when true. */
@@ -234,7 +239,7 @@ export interface SkipDirectiveArgs {
 export type IncludeDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   IncludeDirectiveArgs,
-  {}
+  MyContext
 >;
 export interface IncludeDirectiveArgs {
   /** Included when true. */
@@ -245,7 +250,7 @@ export interface IncludeDirectiveArgs {
 export type DeprecatedDirectiveResolver<Result> = DirectiveResolverFn<
   Result,
   DeprecatedDirectiveArgs,
-  {}
+  MyContext
 >;
 export interface DeprecatedDirectiveArgs {
   /** Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/). */

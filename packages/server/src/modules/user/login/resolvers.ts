@@ -1,8 +1,8 @@
 import * as argon from "argon2";
+import { getConnection } from "typeorm";
+
 import { MutationResolvers } from "../../../types";
 import { User } from "../../../entity/User";
-import { getConnection } from "typeorm";
-// import { formatYupError } from "../../../utils/formatYupError";
 
 const invalidLoginResponse = {
   errors: [
@@ -15,7 +15,7 @@ const invalidLoginResponse = {
 };
 
 export const resolvers: MutationResolvers.Resolvers = {
-  login: async (_, { input }) => {
+  login: async (_, { input }, { req }) => {
     const user = await getConnection()
       .getRepository(User)
       .createQueryBuilder("user")
@@ -32,6 +32,8 @@ export const resolvers: MutationResolvers.Resolvers = {
     if (!valid) {
       return invalidLoginResponse;
     }
+
+    req.session!.userId = user.id;
 
     return {
       errors: [],
