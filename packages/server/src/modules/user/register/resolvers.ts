@@ -1,10 +1,18 @@
 import * as argon from "argon2";
+import { registerSchema } from "@stackflow/common";
 
 import { User } from "../../../entity/User";
 import { MutationResolvers } from "../../../types";
+import { formatYupError } from "../../../utils/formatYupError";
 
 export const resolvers: MutationResolvers.Resolvers = {
-  register: async (_, { input: { username, email, password } }) => {
+  register: async (_, { input }) => {
+    try {
+      await registerSchema.validate(input, { abortEarly: false });
+    } catch (err) {
+      return { errors: formatYupError(err) };
+    }
+    const { email, username, password } = input;
     const hashedPassword = await argon.hash(password);
 
     try {
