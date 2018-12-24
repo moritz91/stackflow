@@ -1,0 +1,27 @@
+{
+  "name": "with-typescript",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc"
+  },
+  "dependencies": {
+    "@zeit/next-typescript": "^1.1.1",
+    "apollo-boost": "^0.1.23",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "latest",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-apollo": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/next": "^7.0.1",
+    "@types/react": "^16.4.16",
+    "@types/react-dom": "16.0.11",
+    "lerna": "^3.8.0",
+    "typescript": "3.2.2"
+  },
+  "license": "ISC"
+}
