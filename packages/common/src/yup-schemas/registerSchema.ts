@@ -3,7 +3,10 @@ import * as yup from "yup";
 export const registerSchema = yup.object().shape({
   username: yup
     .string()
-    .matches(/^[a-zA-Z0-9]*$/, "letters & numbers only")
+    .matches(
+      /^[a-zA-Z0-9]*$/,
+      "username can only contain letters & numbers only"
+    )
     .min(3)
     .max(30)
     .required(),
