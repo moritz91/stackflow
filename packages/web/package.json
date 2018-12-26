@@ -17,6 +17,7 @@
     "formik": "^1.4.1",
     "isomorphic-unfetch": "^3.0.0",
     "next": "latest",
+    "next-routes": "^1.4.2",
     "react": "^16.5.2",
     "react-apollo": "^2.3.3",
     "react-dom": "^16.5.2",
@@ -34,6 +35,7 @@
     "graphql-codegen-typescript-react-apollo": "^0.15.2",
     "graphql-tag": "^2.10.0",
     "lerna": "^3.8.0",
+    "nodemon": "^1.18.9",
     "typescript": "3.2.2",
     "url-loader": "^1.0.1"
   },

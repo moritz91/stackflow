@@ -1,24 +1,21 @@
 import { Form, Button } from "semantic-ui-react";
 import { Formik, Field } from "formik";
 import { InputField } from "../components/formik-fields/InputField";
-import { registerSchema } from "@stackflow/common";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { normalizeErrors } from "../utils/normalizeErrors";
-import { RegisterMutationComponent } from "../components/apollo-components";
-import { registerMutation } from "../graphql/user/mutation/register";
-import Router from "next/router";
+import { LoginMutationComponent } from "../components/apollo-components";
+import { loginMutation } from "../graphql/user/mutation/login";
 
 interface FormValues {
-  username: string;
-  email: string;
+  usernameOrEmail: string;
   password: string;
 }
 
 export default () => (
-  <RegisterMutationComponent mutation={registerMutation}>
+  <LoginMutationComponent mutation={loginMutation}>
     {mutate => (
       <Formik<FormValues>
-        initialValues={{ username: "", email: "", password: "" }}
+        initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (input, { setErrors, setSubmitting }) => {
           const response = await mutate({
             variables: { input }
@@ -26,31 +23,24 @@ export default () => (
           if (
             response &&
             response.data &&
-            response.data.register.errors &&
-            response.data.register.errors.length
+            response.data.login.errors &&
+            response.data.login.errors.length
           ) {
             setSubmitting(false);
-            return setErrors(normalizeErrors(response.data.register.errors));
+            return setErrors(normalizeErrors(response.data.login.errors));
           } else {
-            Router.push("/login");
+            console.log("Login success");
           }
         }}
-        validationSchema={registerSchema}
         validateOnBlur={false}
         validateOnChange={false}
       >
         {({ errors, handleSubmit, isSubmitting }) => {
           <Form onSubmit={handleSubmit}>
             <Field
-              name="username"
-              label="Username"
-              placeholder="Username"
-              component={InputField}
-            />
-            <Field
-              name="email"
-              label="Email"
-              placeholder="Email"
+              name="usernameOrEmail"
+              label="Username or Email"
+              placeholder="Username or Email"
               component={InputField}
             />
             <Field
@@ -61,11 +51,11 @@ export default () => (
             />
             <ErrorMessage errors={errors} />
             <Button disabled={isSubmitting} type="submit">
-              Create Account
+              Login
             </Button>
           </Form>;
         }}
       </Formik>
     )}
-  </RegisterMutationComponent>
+  </LoginMutationComponent>
 );
