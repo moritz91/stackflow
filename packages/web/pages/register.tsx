@@ -5,6 +5,7 @@ import { registerSchema } from "@stackflow/common";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { normalizeErrors } from "../utils/normalizeErrors";
 import { RegisterMutationComponent } from "../components/apollo-components";
+import { registerMutation } from "../graphql/user/mutation/register";
 
 interface FormValues {
   username: string;
@@ -13,7 +14,7 @@ interface FormValues {
 }
 
 export default () => (
-  <RegisterMutationComponent>
+  <RegisterMutationComponent mutation={registerMutation}>
     {mutate => (
       <Formik<FormValues>
         initialValues={{ username: "", email: "", password: "" }}
