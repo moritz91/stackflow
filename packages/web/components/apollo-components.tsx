@@ -52,27 +52,7 @@ export type CreateStoryMutationCreateStory = {
   errors: Maybe<CreateStoryMutationErrors[]>;
 };
 
-export type CreateStoryMutationStory = {
-  __typename?: "Story";
-
-  id: string;
-
-  author: string;
-
-  title: string;
-
-  summary: string;
-
-  body: string;
-
-  previewTitle: string;
-
-  previewDescription: string;
-
-  previewImageUrl: Maybe<string>;
-
-  tags: string[];
-};
+export type CreateStoryMutationStory = StoryInfoFragment;
 
 export type CreateStoryMutationErrors = {
   __typename?: "Error";
@@ -81,6 +61,16 @@ export type CreateStoryMutationErrors = {
 
   message: string;
 };
+
+export type ListStoriesQueryVariables = {};
+
+export type ListStoriesQueryQuery = {
+  __typename?: "Query";
+
+  listStories: ListStoriesQueryListStories[];
+};
+
+export type ListStoriesQueryListStories = StoryInfoFragment;
 
 export type LoginMutationVariables = {
   input: LoginInput;
@@ -140,10 +130,50 @@ export type RegisterMutationErrors = {
   message: string;
 };
 
+export type StoryInfoFragment = {
+  __typename?: "Story";
+
+  id: string;
+
+  author: string;
+
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl: Maybe<string>;
+
+  tags: string[];
+};
+
 import * as ReactApollo from "react-apollo";
 import * as React from "react";
 
 import gql from "graphql-tag";
+
+// ====================================================
+// Fragments
+// ====================================================
+
+export const StoryInfoFragmentDoc = gql`
+  fragment StoryInfo on Story {
+    id
+    author
+    title
+    summary
+    body
+    previewTitle
+    previewDescription
+    previewImageUrl
+    tags
+  }
+`;
 
 // ====================================================
 // Components
@@ -153,15 +183,7 @@ export const CreateStoryMutationDocument = gql`
   mutation CreateStoryMutation($input: CreateStoryInput!) {
     createStory(input: $input) {
       story {
-        id
-        author
-        title
-        summary
-        body
-        previewTitle
-        previewDescription
-        previewImageUrl
-        tags
+        ...StoryInfo
       }
       errors {
         path
@@ -169,6 +191,8 @@ export const CreateStoryMutationDocument = gql`
       }
     }
   }
+
+  ${StoryInfoFragmentDoc}
 `;
 export class CreateStoryMutationComponent extends React.Component<
   Partial<
@@ -217,6 +241,50 @@ export function CreateStoryMutationHOC<TProps, TChildProps = any>(
     CreateStoryMutationVariables,
     CreateStoryMutationProps<TChildProps>
   >(CreateStoryMutationDocument, operationOptions);
+}
+export const ListStoriesQueryDocument = gql`
+  query ListStoriesQuery {
+    listStories {
+      ...StoryInfo
+    }
+  }
+
+  ${StoryInfoFragmentDoc}
+`;
+export class ListStoriesQueryComponent extends React.Component<
+  Partial<
+    ReactApollo.QueryProps<ListStoriesQueryQuery, ListStoriesQueryVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Query<ListStoriesQueryQuery, ListStoriesQueryVariables>
+        query={ListStoriesQueryDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type ListStoriesQueryProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<ListStoriesQueryQuery, ListStoriesQueryVariables>
+> &
+  TChildProps;
+export function ListStoriesQueryHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        ListStoriesQueryQuery,
+        ListStoriesQueryVariables,
+        ListStoriesQueryProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    ListStoriesQueryQuery,
+    ListStoriesQueryVariables,
+    ListStoriesQueryProps<TChildProps>
+  >(ListStoriesQueryDocument, operationOptions);
 }
 export const LoginMutationDocument = gql`
   mutation LoginMutation($input: LoginInput!) {

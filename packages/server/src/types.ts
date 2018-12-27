@@ -35,7 +35,31 @@ export interface RegisterInput {
 // ====================================================
 
 export interface Query {
+  listStories: Story[];
+
   me?: Maybe<User>;
+}
+
+export interface Story {
+  id: string;
+
+  author: string;
+
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl?: Maybe<string>;
+
+  claps?: Maybe<number>;
+
+  tags: string[];
 }
 
 export interface User {
@@ -62,28 +86,6 @@ export interface Error {
   path: string;
 
   message: string;
-}
-
-export interface Story {
-  id: string;
-
-  author: string;
-
-  title: string;
-
-  summary: string;
-
-  body: string;
-
-  previewTitle: string;
-
-  previewDescription: string;
-
-  previewImageUrl?: Maybe<string>;
-
-  claps?: Maybe<number>;
-
-  tags: string[];
 }
 
 export interface LoginResponse {
@@ -165,12 +167,102 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 
 export namespace QueryResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = {}> {
+    listStories?: ListStoriesResolver<Story[], TypeParent, Context>;
+
     me?: MeResolver<Maybe<User>, TypeParent, Context>;
   }
 
+  export type ListStoriesResolver<
+    R = Story[],
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
   export type MeResolver<
     R = Maybe<User>,
     Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace StoryResolvers {
+  export interface Resolvers<Context = MyContext, TypeParent = Story> {
+    id?: IdResolver<string, TypeParent, Context>;
+
+    author?: AuthorResolver<string, TypeParent, Context>;
+
+    title?: TitleResolver<string, TypeParent, Context>;
+
+    summary?: SummaryResolver<string, TypeParent, Context>;
+
+    body?: BodyResolver<string, TypeParent, Context>;
+
+    previewTitle?: PreviewTitleResolver<string, TypeParent, Context>;
+
+    previewDescription?: PreviewDescriptionResolver<
+      string,
+      TypeParent,
+      Context
+    >;
+
+    previewImageUrl?: PreviewImageUrlResolver<
+      Maybe<string>,
+      TypeParent,
+      Context
+    >;
+
+    claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
+
+    tags?: TagsResolver<string[], TypeParent, Context>;
+  }
+
+  export type IdResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type AuthorResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type TitleResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type SummaryResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type BodyResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewTitleResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewDescriptionResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewImageUrlResolver<
+    R = Maybe<string>,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type ClapsResolver<
+    R = Maybe<number>,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type TagsResolver<
+    R = string[],
+    Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
@@ -272,89 +364,6 @@ export namespace ErrorResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace StoryResolvers {
-  export interface Resolvers<Context = MyContext, TypeParent = Story> {
-    id?: IdResolver<string, TypeParent, Context>;
-
-    author?: AuthorResolver<string, TypeParent, Context>;
-
-    title?: TitleResolver<string, TypeParent, Context>;
-
-    summary?: SummaryResolver<string, TypeParent, Context>;
-
-    body?: BodyResolver<string, TypeParent, Context>;
-
-    previewTitle?: PreviewTitleResolver<string, TypeParent, Context>;
-
-    previewDescription?: PreviewDescriptionResolver<
-      string,
-      TypeParent,
-      Context
-    >;
-
-    previewImageUrl?: PreviewImageUrlResolver<
-      Maybe<string>,
-      TypeParent,
-      Context
-    >;
-
-    claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
-
-    tags?: TagsResolver<string[], TypeParent, Context>;
-  }
-
-  export type IdResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type AuthorResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type TitleResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type SummaryResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type BodyResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type PreviewTitleResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type PreviewDescriptionResolver<
-    R = string,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type PreviewImageUrlResolver<
-    R = Maybe<string>,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type ClapsResolver<
-    R = Maybe<number>,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type TagsResolver<
-    R = string[],
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-}
-
 export namespace LoginResponseResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = LoginResponse> {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, Context>;
@@ -424,11 +433,11 @@ export interface DeprecatedDirectiveArgs {
 
 export interface IResolvers {
   Query?: QueryResolvers.Resolvers;
+  Story?: StoryResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
   CreateStoryResponse?: CreateStoryResponseResolvers.Resolvers;
   Error?: ErrorResolvers.Resolvers;
-  Story?: StoryResolvers.Resolvers;
   LoginResponse?: LoginResponseResolvers.Resolvers;
   RegisterResponse?: RegisterResponseResolvers.Resolvers;
 }
