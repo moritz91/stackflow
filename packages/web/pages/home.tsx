@@ -4,7 +4,7 @@ import { listStoriesQuery } from "../graphql/story/query/listStories";
 import { ListStoriesQueryQuery } from "../components/apollo-components";
 
 export default () => (
-  <Layout title="Home | Next.js + TypeScript Example">
+  <Layout title="Home">
     <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
       {({ data }) => {
         return data.listStories.map(ls => <div>{ls.previewTitle}</div>);
