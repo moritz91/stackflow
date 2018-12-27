@@ -18,7 +18,7 @@ interface FormValues {
 }
 
 export default () => (
-  <Layout title={`New Story: ${name}`}>
+  <Layout title={`New Story:`}>
     <CreateStoryMutationComponent mutation={createStoryMutation}>
       {mutate => (
         <Formik<FormValues>
