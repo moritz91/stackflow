@@ -1,5 +1,23 @@
 export type Maybe<T> = T | null;
 
+export interface CreateStoryInput {
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl?: Maybe<string>;
+
+  readingTime: number;
+
+  tags: string[];
+}
+
 export interface LoginInput {
   usernameOrEmail: string;
 
@@ -29,21 +47,53 @@ export interface User {
 }
 
 export interface Mutation {
+  createStory: CreateStoryResponse;
+
   login: LoginResponse;
 
   register: RegisterResponse;
 }
 
-export interface LoginResponse {
+export interface CreateStoryResponse {
   errors?: Maybe<Error[]>;
 
-  user?: Maybe<User>;
+  story?: Maybe<Story>;
 }
 
 export interface Error {
   path: string;
 
   message: string;
+}
+
+export interface Story {
+  id: string;
+
+  author?: Maybe<User>;
+
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl?: Maybe<string>;
+
+  readingTime: number;
+
+  claps?: Maybe<number>;
+
+  tags: string[];
+}
+
+export interface LoginResponse {
+  errors?: Maybe<Error[]>;
+
+  user?: Maybe<User>;
 }
 
 export interface RegisterResponse {
@@ -54,6 +104,9 @@ export interface RegisterResponse {
 // Arguments
 // ====================================================
 
+export interface CreateStoryMutationArgs {
+  input: CreateStoryInput;
+}
 export interface LoginMutationArgs {
   input: LoginInput;
 }
@@ -147,9 +200,20 @@ export namespace UserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = {}> {
+    createStory?: CreateStoryResolver<CreateStoryResponse, TypeParent, Context>;
+
     login?: LoginResolver<LoginResponse, TypeParent, Context>;
 
     register?: RegisterResolver<RegisterResponse, TypeParent, Context>;
+  }
+
+  export type CreateStoryResolver<
+    R = CreateStoryResponse,
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context, CreateStoryArgs>;
+  export interface CreateStoryArgs {
+    input: CreateStoryInput;
   }
 
   export type LoginResolver<
@@ -171,21 +235,24 @@ export namespace MutationResolvers {
   }
 }
 
-export namespace LoginResponseResolvers {
-  export interface Resolvers<Context = MyContext, TypeParent = LoginResponse> {
+export namespace CreateStoryResponseResolvers {
+  export interface Resolvers<
+    Context = MyContext,
+    TypeParent = CreateStoryResponse
+  > {
     errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, Context>;
 
-    user?: UserResolver<Maybe<User>, TypeParent, Context>;
+    story?: StoryResolver<Maybe<Story>, TypeParent, Context>;
   }
 
   export type ErrorsResolver<
     R = Maybe<Error[]>,
-    Parent = LoginResponse,
+    Parent = CreateStoryResponse,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
-  export type UserResolver<
-    R = Maybe<User>,
-    Parent = LoginResponse,
+  export type StoryResolver<
+    R = Maybe<Story>,
+    Parent = CreateStoryResponse,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
@@ -205,6 +272,115 @@ export namespace ErrorResolvers {
   export type MessageResolver<
     R = string,
     Parent = Error,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace StoryResolvers {
+  export interface Resolvers<Context = MyContext, TypeParent = Story> {
+    id?: IdResolver<string, TypeParent, Context>;
+
+    author?: AuthorResolver<Maybe<User>, TypeParent, Context>;
+
+    title?: TitleResolver<string, TypeParent, Context>;
+
+    summary?: SummaryResolver<string, TypeParent, Context>;
+
+    body?: BodyResolver<string, TypeParent, Context>;
+
+    previewTitle?: PreviewTitleResolver<string, TypeParent, Context>;
+
+    previewDescription?: PreviewDescriptionResolver<
+      string,
+      TypeParent,
+      Context
+    >;
+
+    previewImageUrl?: PreviewImageUrlResolver<
+      Maybe<string>,
+      TypeParent,
+      Context
+    >;
+
+    readingTime?: ReadingTimeResolver<number, TypeParent, Context>;
+
+    claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
+
+    tags?: TagsResolver<string[], TypeParent, Context>;
+  }
+
+  export type IdResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type AuthorResolver<
+    R = Maybe<User>,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type TitleResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type SummaryResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type BodyResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewTitleResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewDescriptionResolver<
+    R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type PreviewImageUrlResolver<
+    R = Maybe<string>,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type ReadingTimeResolver<
+    R = number,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type ClapsResolver<
+    R = Maybe<number>,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type TagsResolver<
+    R = string[],
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace LoginResponseResolvers {
+  export interface Resolvers<Context = MyContext, TypeParent = LoginResponse> {
+    errors?: ErrorsResolver<Maybe<Error[]>, TypeParent, Context>;
+
+    user?: UserResolver<Maybe<User>, TypeParent, Context>;
+  }
+
+  export type ErrorsResolver<
+    R = Maybe<Error[]>,
+    Parent = LoginResponse,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type UserResolver<
+    R = Maybe<User>,
+    Parent = LoginResponse,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
@@ -261,8 +437,10 @@ export interface IResolvers {
   Query?: QueryResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
-  LoginResponse?: LoginResponseResolvers.Resolvers;
+  CreateStoryResponse?: CreateStoryResponseResolvers.Resolvers;
   Error?: ErrorResolvers.Resolvers;
+  Story?: StoryResolvers.Resolvers;
+  LoginResponse?: LoginResponseResolvers.Resolvers;
   RegisterResponse?: RegisterResponseResolvers.Resolvers;
 }
 

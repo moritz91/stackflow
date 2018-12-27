@@ -1,5 +1,23 @@
 export type Maybe<T> = T | null;
 
+export interface CreateStoryInput {
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl?: Maybe<string>;
+
+  readingTime: number;
+
+  tags: string[];
+}
+
 export interface LoginInput {
   usernameOrEmail: string;
 

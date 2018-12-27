@@ -1,0 +1,12 @@
+type Story {
+  id: ID!
+  author: User
+  title: String!
+  summary: String!
+  body: String!
+  previewTitle: String!
+  previewDescription: String!
+  previewImageUrl: String
+  claps: Int
+  tags: [String!]!
+}

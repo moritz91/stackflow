@@ -1,0 +1,18 @@
+type CreateStoryResponse {
+  errors: [Error!]
+  story: Story
+}
+
+input CreateStoryInput {
+  title: String!
+  summary: String!
+  body: String!
+  previewTitle: String!
+  previewDescription: String!
+  previewImageUrl: String
+  tags: [String!]!
+}
+
+type Mutation {
+  createStory(input: CreateStoryInput!): CreateStoryResponse!
+}
