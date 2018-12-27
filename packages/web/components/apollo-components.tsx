@@ -13,8 +13,6 @@ export interface CreateStoryInput {
 
   previewImageUrl?: Maybe<string>;
 
-  readingTime: number;
-
   tags: string[];
 }
 
@@ -35,6 +33,54 @@ export interface RegisterInput {
 // ====================================================
 // Documents
 // ====================================================
+
+export type CreateStoryMutationVariables = {
+  input: CreateStoryInput;
+};
+
+export type CreateStoryMutationMutation = {
+  __typename?: "Mutation";
+
+  createStory: CreateStoryMutationCreateStory;
+};
+
+export type CreateStoryMutationCreateStory = {
+  __typename?: "CreateStoryResponse";
+
+  story: Maybe<CreateStoryMutationStory>;
+
+  errors: Maybe<CreateStoryMutationErrors[]>;
+};
+
+export type CreateStoryMutationStory = {
+  __typename?: "Story";
+
+  id: string;
+
+  author: string;
+
+  title: string;
+
+  summary: string;
+
+  body: string;
+
+  previewTitle: string;
+
+  previewDescription: string;
+
+  previewImageUrl: Maybe<string>;
+
+  tags: string[];
+};
+
+export type CreateStoryMutationErrors = {
+  __typename?: "Error";
+
+  path: string;
+
+  message: string;
+};
 
 export type LoginMutationVariables = {
   input: LoginInput;
@@ -103,6 +149,75 @@ import gql from "graphql-tag";
 // Components
 // ====================================================
 
+export const CreateStoryMutationDocument = gql`
+  mutation CreateStoryMutation($input: CreateStoryInput!) {
+    createStory(input: $input) {
+      story {
+        id
+        author
+        title
+        summary
+        body
+        previewTitle
+        previewDescription
+        previewImageUrl
+        tags
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+export class CreateStoryMutationComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateStoryMutationMutation,
+      CreateStoryMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        CreateStoryMutationMutation,
+        CreateStoryMutationVariables
+      >
+        mutation={CreateStoryMutationDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type CreateStoryMutationProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<
+    CreateStoryMutationMutation,
+    CreateStoryMutationVariables
+  >
+> &
+  TChildProps;
+export type CreateStoryMutationMutationFn = ReactApollo.MutationFn<
+  CreateStoryMutationMutation,
+  CreateStoryMutationVariables
+>;
+export function CreateStoryMutationHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateStoryMutationMutation,
+        CreateStoryMutationVariables,
+        CreateStoryMutationProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    CreateStoryMutationMutation,
+    CreateStoryMutationVariables,
+    CreateStoryMutationProps<TChildProps>
+  >(CreateStoryMutationDocument, operationOptions);
+}
 export const LoginMutationDocument = gql`
   mutation LoginMutation($input: LoginInput!) {
     login(input: $input) {

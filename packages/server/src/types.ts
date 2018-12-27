@@ -13,8 +13,6 @@ export interface CreateStoryInput {
 
   previewImageUrl?: Maybe<string>;
 
-  readingTime: number;
-
   tags: string[];
 }
 
@@ -69,7 +67,7 @@ export interface Error {
 export interface Story {
   id: string;
 
-  author?: Maybe<User>;
+  author: string;
 
   title: string;
 
@@ -82,8 +80,6 @@ export interface Story {
   previewDescription: string;
 
   previewImageUrl?: Maybe<string>;
-
-  readingTime: number;
 
   claps?: Maybe<number>;
 
@@ -280,7 +276,7 @@ export namespace StoryResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = Story> {
     id?: IdResolver<string, TypeParent, Context>;
 
-    author?: AuthorResolver<Maybe<User>, TypeParent, Context>;
+    author?: AuthorResolver<string, TypeParent, Context>;
 
     title?: TitleResolver<string, TypeParent, Context>;
 
@@ -302,8 +298,6 @@ export namespace StoryResolvers {
       Context
     >;
 
-    readingTime?: ReadingTimeResolver<number, TypeParent, Context>;
-
     claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
 
     tags?: TagsResolver<string[], TypeParent, Context>;
@@ -315,7 +309,7 @@ export namespace StoryResolvers {
     Context = MyContext
   > = Resolver<R, Parent, Context>;
   export type AuthorResolver<
-    R = Maybe<User>,
+    R = string,
     Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
@@ -346,11 +340,6 @@ export namespace StoryResolvers {
   > = Resolver<R, Parent, Context>;
   export type PreviewImageUrlResolver<
     R = Maybe<string>,
-    Parent = Story,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type ReadingTimeResolver<
-    R = number,
     Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;

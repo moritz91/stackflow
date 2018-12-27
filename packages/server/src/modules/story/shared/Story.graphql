@@ -1,6 +1,6 @@
 type Story {
   id: ID!
-  author: User
+  author: String!
   title: String!
   summary: String!
   body: String!

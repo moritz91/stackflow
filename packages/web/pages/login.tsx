@@ -5,6 +5,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { normalizeErrors } from "../utils/normalizeErrors";
 import { LoginMutationComponent } from "../components/apollo-components";
 import { loginMutation } from "../graphql/user/mutation/login";
+import Router from "next/router";
 
 interface FormValues {
   usernameOrEmail: string;
@@ -29,7 +30,7 @@ export default () => (
             setSubmitting(false);
             return setErrors(normalizeErrors(response.data.login.errors));
           } else {
-            console.log("Login success");
+            Router.push("/");
           }
         }}
         validateOnBlur={false}
