@@ -21,11 +21,10 @@ const Layout: React.SFC<Props> = ({
     </Head>
     <Query<MeQueryQuery> ssr={false} query={meQuery}>
       {({ data, loading }) => {
-        console.log(data.me);
         const isLoggedIn = !!data.me;
 
         if (loading) {
-          return <p>loading...'</p>;
+          return <p>loading...</p>;
         }
 
         return isLoggedIn ? (

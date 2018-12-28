@@ -1,4 +1,4 @@
-import { ListStoriesQueryListStories, MeQueryMe } from "./apollo-components";
+import { ListStoriesQueryListStories } from "./apollo-components";
 
 const CHAR_COUNT = 90;
 
@@ -6,7 +6,6 @@ export const StoryCard = ({
   story
 }: {
   story: ListStoriesQueryListStories;
-  currUser: MeQueryMe | null;
 }) => (
   <div key={story.id}>
     <div>{story.previewTitle}</div>

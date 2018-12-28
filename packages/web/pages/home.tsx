@@ -12,7 +12,7 @@ import { meQuery } from "../graphql/user/query/me";
 
 export default () => (
   <Layout title="List of Stories">
-    <Query<MeQueryQuery> query={meQuery}>
+    <Query<MeQueryQuery> ssr={false} query={meQuery}>
       {({ data: meData, loading }) =>
         loading ? null : (
           <Mutation<CreateResponseMutationComponent>
@@ -22,16 +22,14 @@ export default () => (
             {() => (
               <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
                 {({ data, loading }) => {
-                  console.log(meData);
                   return loading ? null : (
                     <div>
-                      {data.listStories.map(story => (
-                        <StoryCard
-                          key={story.id}
-                          currUser={meData.me}
-                          story={story}
-                        />
-                      ))}
+                      {data.listStories.map(
+                        story =>
+                          meData.me || (
+                            <StoryCard key={story.id} story={story} />
+                          )
+                      )}
                     </div>
                   );
                 }}
