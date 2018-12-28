@@ -43,7 +43,9 @@ export interface Query {
 export interface Story {
   id: string;
 
-  author: string;
+  authorId: string;
+
+  author: User;
 
   title: string;
 
@@ -188,7 +190,9 @@ export namespace StoryResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = Story> {
     id?: IdResolver<string, TypeParent, Context>;
 
-    author?: AuthorResolver<string, TypeParent, Context>;
+    authorId?: AuthorIdResolver<string, TypeParent, Context>;
+
+    author?: AuthorResolver<User, TypeParent, Context>;
 
     title?: TitleResolver<string, TypeParent, Context>;
 
@@ -220,8 +224,13 @@ export namespace StoryResolvers {
     Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
-  export type AuthorResolver<
+  export type AuthorIdResolver<
     R = string,
+    Parent = Story,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type AuthorResolver<
+    R = User,
     Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;

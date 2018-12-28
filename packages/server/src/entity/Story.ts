@@ -13,10 +13,10 @@ export class Story extends BaseEntity {
   @PrimaryGeneratedColumn("uuid") id: string;
 
   @Column()
-  author: string;
+  authorId: string;
 
   @ManyToOne(() => User, user => user.stories)
-  @JoinColumn({ name: "author" })
+  @JoinColumn({ name: "authorId" })
   user: Promise<User>;
 
   @Column({ type: "text", unique: true })

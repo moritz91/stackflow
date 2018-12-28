@@ -70,7 +70,17 @@ export type ListStoriesQueryQuery = {
   listStories: ListStoriesQueryListStories[];
 };
 
-export type ListStoriesQueryListStories = StoryInfoFragment;
+export type ListStoriesQueryListStories = {
+  __typename?: "Story";
+
+  author: ListStoriesQueryAuthor;
+} & StoryInfoFragment;
+
+export type ListStoriesQueryAuthor = {
+  __typename?: "User";
+
+  username: string;
+};
 
 export type LoginMutationVariables = {
   input: LoginInput;
@@ -135,7 +145,7 @@ export type StoryInfoFragment = {
 
   id: string;
 
-  author: string;
+  authorId: string;
 
   title: string;
 
@@ -164,7 +174,7 @@ import gql from "graphql-tag";
 export const StoryInfoFragmentDoc = gql`
   fragment StoryInfo on Story {
     id
-    author
+    authorId
     title
     summary
     body
@@ -246,6 +256,9 @@ export const ListStoriesQueryDocument = gql`
   query ListStoriesQuery {
     listStories {
       ...StoryInfo
+      author {
+        username
+      }
     }
   }
 

@@ -5,6 +5,9 @@ export const listStoriesQuery = gql`
   query ListStoriesQuery {
     listStories {
       ...StoryInfo
+      author {
+        username
+      }
     }
   }
   ${StoryInfoFragment}

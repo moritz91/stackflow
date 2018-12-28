@@ -29,7 +29,7 @@ export const resolvers: MutationResolvers.Resolvers = {
         previewDescription,
         previewImageUrl: previewImageUrl || undefined,
         tags,
-        author: req.session!.userId,
+        authorId: req.session!.userId,
         claps: 0
       }).save();
 

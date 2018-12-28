@@ -7,7 +7,12 @@ export default () => (
   <Layout title="Home">
     <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
       {({ data }) => {
-        return data.listStories.map(ls => <div>{ls.previewTitle}</div>);
+        return data.listStories.map(ls => (
+          <div key={ls.id}>
+            <div>{ls.previewTitle}</div>
+            <div>posted by {ls.author.username}</div>
+          </div>
+        ));
       }}
     </Query>
   </Layout>
