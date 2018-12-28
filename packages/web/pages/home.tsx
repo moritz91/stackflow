@@ -4,7 +4,7 @@ import { listStoriesQuery } from "../graphql/story/query/listStories";
 import { ListStoriesQueryQuery } from "../components/apollo-components";
 
 export default () => (
-  <Layout title="Home">
+  <Layout title="List of Stories">
     <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
       {({ data }) => {
         return data.listStories.map(ls => (
