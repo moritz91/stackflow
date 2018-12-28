@@ -1,9 +1,11 @@
 export type Maybe<T> = T | null;
 
 export interface CreateResponseInput {
-  userId: string;
+  authorId: string;
 
   storyId: string;
+
+  body: string;
 }
 
 export interface CreateStoryInput {

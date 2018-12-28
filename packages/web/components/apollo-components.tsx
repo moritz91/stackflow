@@ -1,5 +1,13 @@
 export type Maybe<T> = T | null;
 
+export interface CreateResponseInput {
+  authorId: string;
+
+  storyId: string;
+
+  body: string;
+}
+
 export interface CreateStoryInput {
   title: string;
 
@@ -33,6 +41,22 @@ export interface RegisterInput {
 // ====================================================
 // Documents
 // ====================================================
+
+export type CreateResponseMutationVariables = {
+  input: CreateResponseInput;
+};
+
+export type CreateResponseMutationMutation = {
+  __typename?: "Mutation";
+
+  createResponse: CreateResponseMutationCreateResponse;
+};
+
+export type CreateResponseMutationCreateResponse = {
+  __typename?: "CreateResponseResponse";
+
+  ok: boolean;
+};
 
 export type CreateStoryMutationVariables = {
   input: CreateStoryInput;
@@ -140,6 +164,34 @@ export type RegisterMutationErrors = {
   message: string;
 };
 
+export type MeQueryVariables = {};
+
+export type MeQueryQuery = {
+  __typename?: "Query";
+
+  me: Maybe<MeQueryMe>;
+};
+
+export type MeQueryMe = {
+  __typename?: "User";
+
+  email: string;
+
+  username: string;
+};
+
+export type ResponseInfoFragment = {
+  __typename?: "Story";
+
+  id: string;
+
+  authorId: string;
+
+  body: string;
+
+  claps: Maybe<number>;
+};
+
 export type StoryInfoFragment = {
   __typename?: "Story";
 
@@ -171,6 +223,15 @@ import gql from "graphql-tag";
 // Fragments
 // ====================================================
 
+export const ResponseInfoFragmentDoc = gql`
+  fragment ResponseInfo on Story {
+    id
+    authorId
+    body
+    claps
+  }
+`;
+
 export const StoryInfoFragmentDoc = gql`
   fragment StoryInfo on Story {
     id
@@ -189,6 +250,61 @@ export const StoryInfoFragmentDoc = gql`
 // Components
 // ====================================================
 
+export const CreateResponseMutationDocument = gql`
+  mutation CreateResponseMutation($input: CreateResponseInput!) {
+    createResponse(input: $input) {
+      ok
+    }
+  }
+`;
+export class CreateResponseMutationComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<
+      CreateResponseMutationMutation,
+      CreateResponseMutationVariables
+    >
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<
+        CreateResponseMutationMutation,
+        CreateResponseMutationVariables
+      >
+        mutation={CreateResponseMutationDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type CreateResponseMutationProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<
+    CreateResponseMutationMutation,
+    CreateResponseMutationVariables
+  >
+> &
+  TChildProps;
+export type CreateResponseMutationMutationFn = ReactApollo.MutationFn<
+  CreateResponseMutationMutation,
+  CreateResponseMutationVariables
+>;
+export function CreateResponseMutationHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        CreateResponseMutationMutation,
+        CreateResponseMutationVariables,
+        CreateResponseMutationProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    CreateResponseMutationMutation,
+    CreateResponseMutationVariables,
+    CreateResponseMutationProps<TChildProps>
+  >(CreateResponseMutationDocument, operationOptions);
+}
 export const CreateStoryMutationDocument = gql`
   mutation CreateStoryMutation($input: CreateStoryInput!) {
     createStory(input: $input) {
@@ -403,4 +519,45 @@ export function RegisterMutationHOC<TProps, TChildProps = any>(
     RegisterMutationVariables,
     RegisterMutationProps<TChildProps>
   >(RegisterMutationDocument, operationOptions);
+}
+export const MeQueryDocument = gql`
+  query meQuery {
+    me {
+      email
+      username
+    }
+  }
+`;
+export class MeQueryComponent extends React.Component<
+  Partial<ReactApollo.QueryProps<MeQueryQuery, MeQueryVariables>>
+> {
+  render() {
+    return (
+      <ReactApollo.Query<MeQueryQuery, MeQueryVariables>
+        query={MeQueryDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type MeQueryProps<TChildProps = any> = Partial<
+  ReactApollo.DataProps<MeQueryQuery, MeQueryVariables>
+> &
+  TChildProps;
+export function MeQueryHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        MeQueryQuery,
+        MeQueryVariables,
+        MeQueryProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    MeQueryQuery,
+    MeQueryVariables,
+    MeQueryProps<TChildProps>
+  >(MeQueryDocument, operationOptions);
 }

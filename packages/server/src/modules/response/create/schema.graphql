@@ -3,8 +3,9 @@ type CreateResponseResponse {
 }
 
 input CreateResponseInput {
-  userId: String!
+  authorId: String!
   storyId: String!
+  body: String!
 }
 
 type Mutation {
