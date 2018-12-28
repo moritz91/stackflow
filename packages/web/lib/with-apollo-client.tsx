@@ -1,25 +1,66 @@
 import React from "react";
+import cookie from "cookie";
 import Head from "next/head";
 import { ApolloClient, NormalizedCacheObject } from "apollo-boost";
 import { getDataFromTree } from "react-apollo";
 
 import initApollo from "./init-apollo";
+import { isBrowser } from "./isBrowser";
+import { meQuery } from "../graphql/user/query/me";
+import { MeQueryQuery } from "../components/apollo-components";
+
+function parseCookies(req?: any, options = {}) {
+  return cookie.parse(
+    req ? req.headers.cookie || "" : document.cookie,
+    options
+  );
+}
+
+const SERVER_LINK_OPTIONS = {
+  uri: "http://localhost:4000/graphql",
+  credentials: "include"
+};
 
 export default (App: any) => {
   return class Apollo extends React.Component {
     static displayName = "withApollo(App)";
     static async getInitialProps(ctx: any) {
-      const { Component, router } = ctx;
+      const {
+        Component,
+        router,
+        ctx: { req, res }
+      } = ctx;
+
+      // Run all GraphQL queries in the component tree
+      // and extract the resulting data
+      const apollo = initApollo(
+        SERVER_LINK_OPTIONS,
+        {},
+        {
+          getToken: () => parseCookies(req).qid
+        }
+      );
+
+      const {
+        data: { me }
+      } = await apollo.query<MeQueryQuery>({
+        query: meQuery
+      });
+
+      ctx.ctx.apolloClient = apollo;
 
       let appProps = {};
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx);
       }
 
-      // Run all GraphQL queries in the component tree
-      // and extract the resulting data
-      const apollo = initApollo();
-      if (!(process as any).browser) {
+      if (res && res.finished) {
+        // When redirecting, the response is finished.
+        // No point in continuing to render
+        return {};
+      }
+
+      if (!isBrowser) {
         try {
           // Run all GraphQL queries
           await getDataFromTree(
@@ -47,6 +88,7 @@ export default (App: any) => {
 
       return {
         ...appProps,
+        me,
         apolloState
       };
     }
@@ -55,7 +97,13 @@ export default (App: any) => {
 
     constructor(props: any) {
       super(props);
-      this.apolloClient = initApollo(props.apolloState);
+      // `getDataFromTree` renders the component first, the client is passed off as a property.
+      // After that rendering is done using Next's normal rendering pipeline
+      this.apolloClient = initApollo(SERVER_LINK_OPTIONS, props.apolloState, {
+        getToken: () => {
+          return parseCookies().qid;
+        }
+      });
     }
 
     render() {

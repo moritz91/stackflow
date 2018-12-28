@@ -2182,7 +2182,7 @@ apollo-language-server@1.1.8:
     vscode-uri "^1.0.6"
     ws "^6.1.0"
 
-apollo-link-context@^1.0.9:
+apollo-link-context@^1.0.10, apollo-link-context@^1.0.9:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.12.tgz#02d72e621a3b75239d4419a9bfd38d8bd9bb0d3f"
   dependencies:
