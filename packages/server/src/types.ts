@@ -73,6 +73,8 @@ export interface Story {
 }
 
 export interface User {
+  id: string;
+
   username: string;
 
   email: string;
@@ -84,6 +86,8 @@ export interface Mutation {
   createStory: CreateStoryResponse;
 
   login: LoginResponse;
+
+  logout: boolean;
 
   register: RegisterResponse;
 }
@@ -295,11 +299,18 @@ export namespace StoryResolvers {
 
 export namespace UserResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = User> {
+    id?: IdResolver<string, TypeParent, Context>;
+
     username?: UsernameResolver<string, TypeParent, Context>;
 
     email?: EmailResolver<string, TypeParent, Context>;
   }
 
+  export type IdResolver<
+    R = string,
+    Parent = User,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
   export type UsernameResolver<
     R = string,
     Parent = User,
@@ -323,6 +334,8 @@ export namespace MutationResolvers {
     createStory?: CreateStoryResolver<CreateStoryResponse, TypeParent, Context>;
 
     login?: LoginResolver<LoginResponse, TypeParent, Context>;
+
+    logout?: LogoutResolver<boolean, TypeParent, Context>;
 
     register?: RegisterResolver<RegisterResponse, TypeParent, Context>;
   }
@@ -354,6 +367,11 @@ export namespace MutationResolvers {
     input: LoginInput;
   }
 
+  export type LogoutResolver<
+    R = boolean,
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
   export type RegisterResolver<
     R = RegisterResponse,
     Parent = {},

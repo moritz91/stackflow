@@ -140,6 +140,14 @@ export type LoginMutationErrors = {
   message: string;
 };
 
+export type LogoutMutationVariables = {};
+
+export type LogoutMutationMutation = {
+  __typename?: "Mutation";
+
+  logout: boolean;
+};
+
 export type RegisterMutationVariables = {
   input: RegisterInput;
 };
@@ -174,6 +182,8 @@ export type MeQueryQuery = {
 
 export type MeQueryMe = {
   __typename?: "User";
+
+  id: string;
 
   email: string;
 
@@ -468,6 +478,50 @@ export function LoginMutationHOC<TProps, TChildProps = any>(
     LoginMutationProps<TChildProps>
   >(LoginMutationDocument, operationOptions);
 }
+export const LogoutMutationDocument = gql`
+  mutation LogoutMutation {
+    logout
+  }
+`;
+export class LogoutMutationComponent extends React.Component<
+  Partial<
+    ReactApollo.MutationProps<LogoutMutationMutation, LogoutMutationVariables>
+  >
+> {
+  render() {
+    return (
+      <ReactApollo.Mutation<LogoutMutationMutation, LogoutMutationVariables>
+        mutation={LogoutMutationDocument}
+        {...(this as any)["props"] as any}
+      />
+    );
+  }
+}
+export type LogoutMutationProps<TChildProps = any> = Partial<
+  ReactApollo.MutateProps<LogoutMutationMutation, LogoutMutationVariables>
+> &
+  TChildProps;
+export type LogoutMutationMutationFn = ReactApollo.MutationFn<
+  LogoutMutationMutation,
+  LogoutMutationVariables
+>;
+export function LogoutMutationHOC<TProps, TChildProps = any>(
+  operationOptions:
+    | ReactApollo.OperationOption<
+        TProps,
+        LogoutMutationMutation,
+        LogoutMutationVariables,
+        LogoutMutationProps<TChildProps>
+      >
+    | undefined
+) {
+  return ReactApollo.graphql<
+    TProps,
+    LogoutMutationMutation,
+    LogoutMutationVariables,
+    LogoutMutationProps<TChildProps>
+  >(LogoutMutationDocument, operationOptions);
+}
 export const RegisterMutationDocument = gql`
   mutation RegisterMutation($input: RegisterInput!) {
     register(input: $input) {
@@ -523,6 +577,7 @@ export function RegisterMutationHOC<TProps, TChildProps = any>(
 export const MeQueryDocument = gql`
   query meQuery {
     me {
+      id
       email
       username
     }

@@ -1,11 +1,11 @@
 import gql from "graphql-tag";
+import { userInfoFragment } from "../fragments/UserInfo";
 
 export const meQuery = gql`
-  query meQuery {
+  query Me {
     me {
-      id
-      email
-      username
+      ...UserInfo
     }
   }
+  ${userInfoFragment}
 `;
