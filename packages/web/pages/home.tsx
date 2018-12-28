@@ -3,33 +3,43 @@ import { Query, Mutation } from "react-apollo";
 import { listStoriesQuery } from "../graphql/story/query/listStories";
 import {
   ListStoriesQueryQuery,
-  CreateResponseMutationComponent
+  CreateResponseMutationComponent,
+  MeQueryQuery
 } from "../components/apollo-components";
 import { createResponseMutation } from "../graphql/response/mutation/createResponse";
-
-const CHAR_COUNT = 90;
+import { StoryCard } from "../components/StoryCard";
+import { meQuery } from "../graphql/user/query/me";
 
 export default () => (
   <Layout title="List of Stories">
-    <Mutation<CreateResponseMutationComponent>
-      mutation={createResponseMutation}
-      refetchQueries={[{ query: listStoriesQuery }]}
-    >
-      {() => (
-        <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
-          {({ data }) => {
-            return data.listStories.map(ls => (
-              <div key={ls.id}>
-                <div>{ls.previewTitle}</div>
-                <div>{`${ls.previewDescription.slice(0, CHAR_COUNT)}${
-                  ls.previewDescription.length > CHAR_COUNT ? "..." : ""
-                }`}</div>
-                <div>posted by {ls.author.username}</div>
-              </div>
-            ));
-          }}
-        </Query>
-      )}
-    </Mutation>
+    <Query<MeQueryQuery> query={meQuery}>
+      {({ data: meData, loading }) =>
+        loading ? null : (
+          <Mutation<CreateResponseMutationComponent>
+            mutation={createResponseMutation}
+            refetchQueries={[{ query: listStoriesQuery }]}
+          >
+            {() => (
+              <Query<ListStoriesQueryQuery> query={listStoriesQuery}>
+                {({ data, loading }) => {
+                  console.log(meData);
+                  return loading ? null : (
+                    <div>
+                      {data.listStories.map(story => (
+                        <StoryCard
+                          key={story.id}
+                          currUser={meData.me}
+                          story={story}
+                        />
+                      ))}
+                    </div>
+                  );
+                }}
+              </Query>
+            )}
+          </Mutation>
+        )
+      }
+    </Query>
   </Layout>
 );
