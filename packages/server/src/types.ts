@@ -1,5 +1,11 @@
 export type Maybe<T> = T | null;
 
+export interface CreateResponseInput {
+  userId: string;
+
+  storyId: string;
+}
+
 export interface CreateStoryInput {
   title: string;
 
@@ -71,11 +77,17 @@ export interface User {
 }
 
 export interface Mutation {
+  createResponse: CreateResponseResponse;
+
   createStory: CreateStoryResponse;
 
   login: LoginResponse;
 
   register: RegisterResponse;
+}
+
+export interface CreateResponseResponse {
+  ok: boolean;
 }
 
 export interface CreateStoryResponse {
@@ -104,6 +116,9 @@ export interface RegisterResponse {
 // Arguments
 // ====================================================
 
+export interface CreateResponseMutationArgs {
+  input: CreateResponseInput;
+}
 export interface CreateStoryMutationArgs {
   input: CreateStoryInput;
 }
@@ -297,11 +312,26 @@ export namespace UserResolvers {
 
 export namespace MutationResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = {}> {
+    createResponse?: CreateResponseResolver<
+      CreateResponseResponse,
+      TypeParent,
+      Context
+    >;
+
     createStory?: CreateStoryResolver<CreateStoryResponse, TypeParent, Context>;
 
     login?: LoginResolver<LoginResponse, TypeParent, Context>;
 
     register?: RegisterResolver<RegisterResponse, TypeParent, Context>;
+  }
+
+  export type CreateResponseResolver<
+    R = CreateResponseResponse,
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context, CreateResponseArgs>;
+  export interface CreateResponseArgs {
+    input: CreateResponseInput;
   }
 
   export type CreateStoryResolver<
@@ -330,6 +360,21 @@ export namespace MutationResolvers {
   export interface RegisterArgs {
     input: RegisterInput;
   }
+}
+
+export namespace CreateResponseResponseResolvers {
+  export interface Resolvers<
+    Context = MyContext,
+    TypeParent = CreateResponseResponse
+  > {
+    ok?: OkResolver<boolean, TypeParent, Context>;
+  }
+
+  export type OkResolver<
+    R = boolean,
+    Parent = CreateResponseResponse,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace CreateStoryResponseResolvers {
@@ -445,6 +490,7 @@ export interface IResolvers {
   Story?: StoryResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
+  CreateResponseResponse?: CreateResponseResponseResolvers.Resolvers;
   CreateStoryResponse?: CreateStoryResponseResolvers.Resolvers;
   Error?: ErrorResolvers.Resolvers;
   LoginResponse?: LoginResponseResolvers.Resolvers;

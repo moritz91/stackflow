@@ -6,6 +6,8 @@ import { normalizeErrors } from "../utils/normalizeErrors";
 import { CreateStoryMutationComponent } from "../components/apollo-components";
 import { createStoryMutation } from "../graphql/story/mutation/createStory";
 import Layout from "../components/Layout";
+import Router from "next/router";
+import { listStoriesQuery } from "../graphql/story/query/listStories";
 
 interface FormValues {
   title: string;
@@ -19,7 +21,10 @@ interface FormValues {
 
 export default () => (
   <Layout title={`New Story:`}>
-    <CreateStoryMutationComponent mutation={createStoryMutation}>
+    <CreateStoryMutationComponent
+      mutation={createStoryMutation}
+      refetchQueries={[{ query: listStoriesQuery }]}
+    >
       {mutate => (
         <Formik<FormValues>
           initialValues={{
@@ -46,7 +51,7 @@ export default () => (
                 normalizeErrors(response.data.createStory.errors)
               );
             } else {
-              console.log("Login success");
+              Router.push("/home");
             }
           }}
           validateOnBlur={false}

@@ -21,7 +21,7 @@ export const resolvers: MutationResolvers.Resolvers = {
     isAuthenticated(req);
 
     try {
-      const story = await Story.create({
+      const story = (await Story.create({
         title,
         summary,
         body,
@@ -31,7 +31,7 @@ export const resolvers: MutationResolvers.Resolvers = {
         tags,
         authorId: req.session!.userId,
         claps: 0
-      }).save();
+      }).save()) as any;
 
       return {
         story,

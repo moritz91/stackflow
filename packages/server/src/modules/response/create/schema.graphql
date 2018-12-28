@@ -1,0 +1,12 @@
+type CreateResponseResponse {
+  ok: Boolean!
+}
+
+input CreateResponseInput {
+  userId: String!
+  storyId: String!
+}
+
+type Mutation {
+  createResponse(input: CreateResponseInput!): CreateResponseResponse!
+}

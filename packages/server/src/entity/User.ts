@@ -6,6 +6,7 @@ import {
   OneToMany
 } from "typeorm";
 import { Story } from "./Story";
+import { Response } from "./Response";
 
 @Entity()
 export class User extends BaseEntity {
@@ -20,6 +21,9 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @OneToMany(() => Story, story => story.author)
+  @OneToMany(() => Story, story => story.user)
   stories: Story[];
+
+  @OneToMany(() => Response, response => response.user)
+  responses: Response[];
 }
