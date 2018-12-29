@@ -10,4 +10,5 @@ type Story {
   previewImageUrl: String
   claps: Int
   tags: [String!]!
+  responses: [Response!]
 }

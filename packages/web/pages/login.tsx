@@ -6,6 +6,7 @@ import { normalizeErrors } from "../utils/normalizeErrors";
 import { LoginMutationComponent } from "../components/apollo-components";
 import { loginMutation } from "../graphql/user/mutation/login";
 import Router from "next/router";
+import { meQuery } from "../graphql/user/query/me";
 
 interface FormValues {
   usernameOrEmail: string;
@@ -19,7 +20,19 @@ export default () => (
         initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (input, { setErrors, setSubmitting }) => {
           const response = await mutate({
-            variables: { input }
+            variables: { input },
+            update: (store, { data }) => {
+              if (!data || !data.login.user) {
+                return;
+              }
+
+              store.writeQuery({
+                query: meQuery,
+                data: {
+                  me: data.login.user
+                }
+              });
+            }
           });
           if (
             response &&

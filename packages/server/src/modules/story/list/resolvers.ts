@@ -3,7 +3,7 @@ import { Story } from "../../../entity/Story";
 
 const resolvers: QueryResolvers.Resolvers = {
   listStories: () => {
-    return Story.find();
+    return Story.find() as any;
   }
 };
 

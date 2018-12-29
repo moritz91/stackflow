@@ -1,0 +1,7 @@
+input ListResponsesInput {
+  storyId: String!
+}
+
+type Query {
+  listResponses(input: ListResponsesInput!): [Response!]!
+}

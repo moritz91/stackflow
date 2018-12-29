@@ -1,8 +1,10 @@
 export type Maybe<T> = T | null;
 
-export interface CreateResponseInput {
-  authorId: string;
+export interface ListResponsesInput {
+  storyId: string;
+}
 
+export interface CreateResponseInput {
   storyId: string;
 
   body: string;
@@ -43,9 +45,33 @@ export interface RegisterInput {
 // ====================================================
 
 export interface Query {
+  listResponses: Response[];
+
   listStories: Story[];
 
   me?: Maybe<User>;
+}
+
+export interface Response {
+  id: string;
+
+  storyId: string;
+
+  authorId: string;
+
+  author: User;
+
+  body: string;
+
+  claps?: Maybe<number>;
+}
+
+export interface User {
+  id: string;
+
+  username: string;
+
+  email: string;
 }
 
 export interface Story {
@@ -70,14 +96,8 @@ export interface Story {
   claps?: Maybe<number>;
 
   tags: string[];
-}
 
-export interface User {
-  id: string;
-
-  username: string;
-
-  email: string;
+  responses?: Maybe<Response[]>;
 }
 
 export interface Mutation {
@@ -122,6 +142,9 @@ export interface RegisterResponse {
 // Arguments
 // ====================================================
 
+export interface ListResponsesQueryArgs {
+  input: ListResponsesInput;
+}
 export interface CreateResponseMutationArgs {
   input: CreateResponseInput;
 }
@@ -190,9 +213,20 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 
 export namespace QueryResolvers {
   export interface Resolvers<Context = MyContext, TypeParent = {}> {
+    listResponses?: ListResponsesResolver<Response[], TypeParent, Context>;
+
     listStories?: ListStoriesResolver<Story[], TypeParent, Context>;
 
     me?: MeResolver<Maybe<User>, TypeParent, Context>;
+  }
+
+  export type ListResponsesResolver<
+    R = Response[],
+    Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context, ListResponsesArgs>;
+  export interface ListResponsesArgs {
+    input: ListResponsesInput;
   }
 
   export type ListStoriesResolver<
@@ -203,6 +237,79 @@ export namespace QueryResolvers {
   export type MeResolver<
     R = Maybe<User>,
     Parent = {},
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace ResponseResolvers {
+  export interface Resolvers<Context = MyContext, TypeParent = Response> {
+    id?: IdResolver<string, TypeParent, Context>;
+
+    storyId?: StoryIdResolver<string, TypeParent, Context>;
+
+    authorId?: AuthorIdResolver<string, TypeParent, Context>;
+
+    author?: AuthorResolver<User, TypeParent, Context>;
+
+    body?: BodyResolver<string, TypeParent, Context>;
+
+    claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
+  }
+
+  export type IdResolver<
+    R = string,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type StoryIdResolver<
+    R = string,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type AuthorIdResolver<
+    R = string,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type AuthorResolver<
+    R = User,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type BodyResolver<
+    R = string,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type ClapsResolver<
+    R = Maybe<number>,
+    Parent = Response,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace UserResolvers {
+  export interface Resolvers<Context = MyContext, TypeParent = User> {
+    id?: IdResolver<string, TypeParent, Context>;
+
+    username?: UsernameResolver<string, TypeParent, Context>;
+
+    email?: EmailResolver<string, TypeParent, Context>;
+  }
+
+  export type IdResolver<
+    R = string,
+    Parent = User,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type UsernameResolver<
+    R = string,
+    Parent = User,
+    Context = MyContext
+  > = Resolver<R, Parent, Context>;
+  export type EmailResolver<
+    R = string,
+    Parent = User,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
@@ -238,6 +345,8 @@ export namespace StoryResolvers {
     claps?: ClapsResolver<Maybe<number>, TypeParent, Context>;
 
     tags?: TagsResolver<string[], TypeParent, Context>;
+
+    responses?: ResponsesResolver<Maybe<Response[]>, TypeParent, Context>;
   }
 
   export type IdResolver<
@@ -295,30 +404,9 @@ export namespace StoryResolvers {
     Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
-}
-
-export namespace UserResolvers {
-  export interface Resolvers<Context = MyContext, TypeParent = User> {
-    id?: IdResolver<string, TypeParent, Context>;
-
-    username?: UsernameResolver<string, TypeParent, Context>;
-
-    email?: EmailResolver<string, TypeParent, Context>;
-  }
-
-  export type IdResolver<
-    R = string,
-    Parent = User,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type UsernameResolver<
-    R = string,
-    Parent = User,
-    Context = MyContext
-  > = Resolver<R, Parent, Context>;
-  export type EmailResolver<
-    R = string,
-    Parent = User,
+  export type ResponsesResolver<
+    R = Maybe<Response[]>,
+    Parent = Story,
     Context = MyContext
   > = Resolver<R, Parent, Context>;
 }
@@ -507,8 +595,9 @@ export interface DeprecatedDirectiveArgs {
 
 export interface IResolvers {
   Query?: QueryResolvers.Resolvers;
-  Story?: StoryResolvers.Resolvers;
+  Response?: ResponseResolvers.Resolvers;
   User?: UserResolvers.Resolvers;
+  Story?: StoryResolvers.Resolvers;
   Mutation?: MutationResolvers.Resolvers;
   CreateResponseResponse?: CreateResponseResponseResolvers.Resolvers;
   CreateStoryResponse?: CreateStoryResponseResolvers.Resolvers;

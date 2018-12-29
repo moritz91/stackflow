@@ -3,7 +3,6 @@ type CreateResponseResponse {
 }
 
 input CreateResponseInput {
-  authorId: String!
   storyId: String!
   body: String!
 }

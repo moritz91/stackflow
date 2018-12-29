@@ -13,7 +13,7 @@ import { meQuery } from "../graphql/user/query/me";
 export default () => (
   <Layout title="List of Stories">
     <Query<MeQueryQuery> query={meQuery}>
-      {({ data: dataMe, loading }) =>
+      {({ loading }) =>
         loading ? null : (
           <Mutation<CreateResponseMutationComponent>
             mutation={createResponseMutation}

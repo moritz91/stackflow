@@ -1,0 +1,8 @@
+type Response {
+  id: ID!
+  storyId: String!
+  authorId: String!
+  author: User!
+  body: String!
+  claps: Int
+}
